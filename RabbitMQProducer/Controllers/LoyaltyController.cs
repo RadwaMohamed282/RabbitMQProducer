@@ -8,26 +8,26 @@ namespace ProducerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CouponzController : ControllerBase
+    public class LoyaltyController : ControllerBase
     {
         private readonly RabbitMQConfig _rabbitMQConfig;
         private readonly Producer _producer;
 
-        public CouponzController(IOptions<RabbitMQConfig> options, Producer producer)
+        public LoyaltyController(IOptions<RabbitMQConfig> options, Producer producer)
         {
             _rabbitMQConfig = options.Value;
             _producer = producer;
         }
 
         [HttpPost]
-        public IActionResult AddNewOffer(SubscribeToOffer subscribeToOffer)
+        public IActionResult AddNewPoint(RewardLoyalty rewardLoyalty)
         {
-            var jsonProduct = System.Text.Json.JsonSerializer.Serialize(subscribeToOffer);
+            var jsonProduct = System.Text.Json.JsonSerializer.Serialize(rewardLoyalty);
 
             // Publish the product message to RabbitMQ
-            _producer.PublishCouponzMessage(jsonProduct);
+            _producer.PublishLoyaltyMessage(jsonProduct);
 
-            return Ok(subscribeToOffer);
+            return Ok(rewardLoyalty);
         }
     }
 }
