@@ -2,6 +2,7 @@
 using DeliveryIntegration.Configrations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using RabbitMQProducer.DTO;
 using RabbitMQProducer.Services.RabbitMQ;
 
 namespace ProducerAPI.Controllers
@@ -20,10 +21,14 @@ namespace ProducerAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewOffer(SubscribeToOffer subscribeToOffer)
+        public ActionResult<IEnumerable<SubscribeToOffer>> AddNewOffer(List<SubscribeToOfferDto> subscribeToOffer)
         {
             var jsonProduct = System.Text.Json.JsonSerializer.Serialize(subscribeToOffer);
 
+            if (subscribeToOffer == null || subscribeToOffer.Count == 0)
+            {
+                return BadRequest("The subscription list cannot be empty.");
+            }
             // Publish the product message to RabbitMQ
             _producer.PublishCouponzMessage(jsonProduct);
 

@@ -1,4 +1,6 @@
-﻿namespace Data_Integration.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Data_Integration.Models
 {
     public class RewardLoyalty
     {
@@ -6,5 +8,6 @@
         public string WalletCode { get; set; }
         public int PointsValue { get; set; }
         public string ExternalLogId { get; set; }
+        public DateTime? CreationDate { get; set; }
     }
 }
